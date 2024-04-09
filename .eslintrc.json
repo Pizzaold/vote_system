@@ -32,6 +32,7 @@
 		"no-shadow": ["off", { "allow": ["err", "resolve", "reject"] }],
 		"no-trailing-spaces": ["warn"],
 		"no-var": "error",
+		"no-unused-vars": ["warn"],
 		"no-empty-function": "off",
 		"object-curly-spacing": ["error", "always"],
 		"prefer-const": "error",
