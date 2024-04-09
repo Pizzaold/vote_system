@@ -23,6 +23,7 @@ app.use(session({
 
 (async () => {
 	await database.start();
+	await database.initializeModels();
 })();
 
 app.get('/', (req, res) => {
@@ -42,7 +43,14 @@ app.post('/login', async (req, res) => {
 			return res.status(401).send('Invalid username or password');
 		}
 		req.session.user = userData;
-		res.redirect('/lobby');
+		const resultsData = await database.tulemusedModel.findOne({ order: [['h_alguse_aeg', 'DESC']] });
+		const time = new Date(resultsData.h_alguse_aeg).toLocaleTimeString('en-et', {
+			hour12: false,
+			hour: 'numeric',
+			minute: 'numeric',
+		});
+
+		res.render('pages/lobby', { time });
 	} catch (error) {
 		console.error('Error during login:', error);
 		res.status(500).send('Internal Server Error');

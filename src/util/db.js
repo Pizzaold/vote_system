@@ -2,6 +2,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 const Hääletus = require('../models/HÄÄLETUS');
 const Logi = require('../models/LOGI');
 const kasutajad = require('../models/KASUTAJAD');
+const TULEMUSED = require('../models/TULEMUSED');
 require('dotenv/config');
 
 class DB {
@@ -31,7 +32,7 @@ class DB {
 		}
 		this.HääletusModel = Hääletus(this.sequelize, DataTypes);
 		this.LogiModel = Logi(this.sequelize, DataTypes);
-
+		this.tulemusedModel = TULEMUSED(this.sequelize, DataTypes);
 		this.HääletusModel.addHook('afterUpdate', 'logUpdate', async (instance) => {
 			const { kasutaja_id, otsus } = instance._previousDataValues;
 			const tegevus_aeg = new Date();
@@ -57,11 +58,11 @@ class DB {
 }
 
 (async () => {
-	const database = new DB();
-	await database.start();
-	await database.initializeModels();
-	const log = await database.logAction(3, 'poolt');
-	console.log(log);
+	// const database = new DB();
+	// await database.start();
+	// await database.initializeModels();
+	// const log = await database.logAction(3, 'poolt');
+	// console.log(log);
 })();
 
 module.exports = DB;
