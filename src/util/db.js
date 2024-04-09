@@ -23,12 +23,12 @@ class DB {
 			console.error('Unable to connect to the database:', error);
 		}
 	}
-	async getUser(username) {
+	async getUser(username, password) {
 		if (!this.started) {
 			throw new Error('Database not started');
 		}
 		const voted = kasutajad(this.sequelize, DataTypes);
-		return await voted.findOne({ where: { kasutajanimi:username } });
+		return await voted.findOne({ where: { kasutajanimi: username, parool: password } });
 	}
 }
 

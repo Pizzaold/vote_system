@@ -27,14 +27,11 @@ app.post('/login', async (req, res) => {
 	console.log('Password:', password);
 	try {
 
-		const userData = await database.getUser(user);
+		const userData = await database.getUser(user, password);
 		if (!userData) {
 			return res.status(401).send('Invalid username or password');
 		}
-		if (password !== userData.password) {
-			return res.status(401).send('Invalid username or password');
-		}
-		res.redirect('/success');
+		res.redirect('/lobby');
 	} catch (error) {
 		console.error('Error during login:', error);
 		res.status(500).send('Internal Server Error');
