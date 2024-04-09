@@ -61,9 +61,7 @@ class DB {
 	await database.start();
 	await database.initializeModels();
 	const log = await database.logAction(3, 'poolt');
-	const users = await database.getUser();
 	console.log(log);
-	console.log(users);
 })();
 
 module.exports = DB;
