@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const Hääletus = require('../models/HÄÄLETUS');
 const Logi = require('../models/LOGI');
+const { time } = require('console');
 require('dotenv/config');
 
 class DB {
@@ -12,6 +13,7 @@ class DB {
             host: process.env.DB_HOST,
             username: process.env.DB_USER,
             password: process.env.DB_PASS,
+			timezone: 'Talline/Europe',
         });
     }
     async start() {
