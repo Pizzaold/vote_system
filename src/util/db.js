@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const hääletus = require('../models/HÄÄLETUS');
+const kasutajad = require('../models/KASUTAJAD');
 require('dotenv/config');
 
 class DB {
@@ -22,20 +23,13 @@ class DB {
 			console.error('Unable to connect to the database:', error);
 		}
 	}
-	async getUser() {
+	async getUser(username) {
 		if (!this.started) {
 			throw new Error('Database not started');
 		}
-		const voted = hääletus(this.sequelize, DataTypes);
-		return await voted.findAll();
+		const voted = kasutajad(this.sequelize, DataTypes);
+		return await voted.findOne({ where: { kasutajanimi:username } });
 	}
 }
-
-(async () => {
-	const andmebaas = new DB();
-	await andmebaas.start();
-	const users = await andmebaas.getUser();
-	console.log(users);
-})();
 
 module.exports = DB;
