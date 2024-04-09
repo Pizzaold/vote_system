@@ -7,6 +7,11 @@
     "lint": "yarn run eslint --fix .",
     "start": "node src/index.js"
   },
+  "lint-staged": {
+    "*.js": [
+      "yarn run lint"
+    ]
+  },
   "dependencies": {
     "chalk": "4",
     "dotenv": "^16.4.5",
@@ -19,6 +24,8 @@
   "devDependencies": {
     "@types/node": "^20.12.4",
     "eslint": "^8.57.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
     "sequelize-auto": "^0.8.8"
   }
 }
