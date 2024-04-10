@@ -1,8 +1,6 @@
 <%- include('header'); -%>
-    <div class="d-flex justify-content-center align-items-center hugetext" style="height: 100vh;">
-        <h1 class="display-1">
-            <%= time %>
-        </h1>
-    </div>
-
+<div class="d-flex justify-content-center align-items-center hugetext" style="height: 100vh;">
+    <h1 class="display-1" id="countdown" data-time="<%= time %>"></h1>
+</div>
+<script src="../js/countdown.js"></script>
 </html>
