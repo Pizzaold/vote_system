@@ -3,6 +3,7 @@ const ejs = require('ejs');
 const path = require('path');
 const db = require('./util/db');
 const session = require('express-session');
+const { error } = require('console');
 const database = new db();
 
 const app = express();
@@ -28,7 +29,7 @@ app.use(session({
 })();
 
 app.get('/', (req, res) => {
-	res.render('pages/login');
+	res.render('pages/login', { error: null });
 });
 
 app.post('/login', async (req, res) => {
@@ -40,11 +41,9 @@ app.post('/login', async (req, res) => {
 
 		const userData = await database.getUser(user, password);
 		if (!userData) {
-			// this need to be shown on the login page later :)
-			return res.status(401).send('Invalid username or password');
+			return res.render('pages/login', { error: 'Invalid username or password' });
 		}
 		req.session.user = userData;
-		
 
 		res.redirect('/lobby');
 	} catch (error) {
