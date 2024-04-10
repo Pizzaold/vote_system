@@ -1,14 +1,17 @@
 const countdown = document.getElementById('countdown');
+const voted = countdown.getAttribute('voted');
 const endTime = new Date(countdown.getAttribute('data-time')).getTime() + new Date().getTimezoneOffset() * 60000;
 
 const timer = setInterval(() => {
     const now = new Date().getTime();
     const distance = endTime - now;
-    let 
-
     if (distance <= 0) {
+        if (voted === 'false') {
+            window.location.href = '/voting';
+        } else if (voted === 'true') {
+           countdown.innerHTML = 'Voting has ended';
+        }
         clearInterval(timer);
-        window.location.href = '/voting';
     } else {
         const hours = Math.floor(distance / (1000 * 60 * 60));
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
