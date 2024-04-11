@@ -30,21 +30,8 @@ app.use(session({
 app.get('/', async (req, res) => {
     if (!req.session.user) {
         return res.redirect('/login');
-    }
-
-    try {
-        const hasRedirectedToVoting = await database.checkIfRedirectedToVoting(req.session.user.id);
-        
-        if (hasRedirectedToVoting) {
-            return res.render('pages/lobby', { votingEnded: true });
-        }
-
-        const resultsData = await database.tulemusedModel.findOne({ order: [['h_alguse_aeg', 'DESC']] });
-        const time = new Date(resultsData.h_alguse_aeg);
-        res.render('pages/lobby', { time });
-    } catch (error) {
-        console.error('Error while checking redirection to voting:', error);
-        res.status(500).send('Internal Server Error');
+    } else {
+        res.redirect('/lobby');
     }
 });
 
@@ -89,7 +76,7 @@ app.get('/lobby', async (req, res) => {
     const resultsData = await database.tulemusedModel.findOne({ order: [['h_alguse_aeg', 'DESC']] });
     const time = new Date(resultsData.h_alguse_aeg)
 	const user = req.session.user;
-	const voted = await database.checkIfRedirectedToVoting(user);
+	const voted = await database.checkIfVoted(user);
     res.render('pages/lobby', { time, voted });
 });
 
@@ -99,7 +86,7 @@ app.get('/check-voting-status', async (req, res) => {
         return res.status(401).json({ error: 'User not authenticated' });
     }
     try {
-        const votingEnded = await database.checkIfRedirectedToVoting(user);
+        const votingEnded = await database.checkIfVoted(user);
         res.json({ voted: votingEnded });
     } catch (error) {
         console.error('Error checking voting status:', error);
@@ -113,7 +100,7 @@ app.get('/voting', async (req, res) => {
         return res.redirect('/');
     }
     try {
-        const votingEnded = await database.checkIfRedirectedToVoting(user);
+        const votingEnded = await database.checkIfVoted(user);
         if (votingEnded) {
             return res.redirect('/lobby');
         }

@@ -50,13 +50,7 @@ class DB {
         await this.HääletusModel.update({ otsus }, { where: { kasutaja_id } });
         return await this.LogiModel.findAll();
     }
-    async checkIfRedirectedToVoting(userId) {
-		if (!this.started) {
-			throw new Error('Database not started');
-		}
-		const voted = Kasutajad(this.sequelize, DataTypes);
-		return await voted.findOne({ where: { id: userId } });
-	}
+    
 	async markAllUsersAsVoted() {
 		if (!this.started) {
 			throw new Error('Database not started');
@@ -65,7 +59,7 @@ class DB {
 		await user.update({ voted: true }, { where: {} });
 	}	
 	
-	async checkIfRedirectedToVoting(user) {
+	async checkIfVoted(user) {
 		if (!this.started) {
 			throw new Error('Database not started');
 		}
