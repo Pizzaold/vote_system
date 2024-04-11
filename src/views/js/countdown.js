@@ -5,7 +5,9 @@ const endTime = new Date(countdown.getAttribute('data-time')).getTime() + new Da
 const timer = setInterval(() => {
     const now = new Date().getTime();
     const distance = endTime - now;
-    if (distance <= 0) {
+    if (isNaN(distance)){
+        countdown.innerHTML = 'Voting has not started';
+    } else if (distance <= 0) {
         if (voted === 'false') {
             window.location.href = '/voting';
         } else if (voted === 'true') {
