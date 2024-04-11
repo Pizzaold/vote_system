@@ -46,23 +46,55 @@ app.get('/voting-start-time', async (req, res) => {
     }
 });
 
+app.get('/admin', async (req, res) => {
+    const user = req.session.user;
+    if (!user || user.id !== 12) {
+        return res.redirect('/');
+    }
+    res.render('pages/admin');
+});
+
+app.post('/admin/add-voting-time', async (req, res) => {
+    const user = req.session.user;
+    if (!user || user.id !== 12) {
+        return res.redirect('/');
+    }
+
+    const { startDate, startTime } = req.body;
+    const newVotingTime = `${startDate} ${startTime}`;
+    console.log('New voting time:', newVotingTime);
+
+    try {
+        await database.addNewVotingTime(newVotingTime);
+        res.redirect('/admin');
+    } catch (error) {
+        console.error('Error adding new voting time:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 app.post('/login', async (req, res) => {
     const user = req.body.kasutajanimi;
     const password = req.body.parool;
-    console.log('User:', user);
-    console.log('Password:', password);
     try {
         const userData = await database.getUser(user, password);
+        console.log('User data:', userData);
         if (!userData) {
             return res.render('pages/login', { error: 'Invalid username or password' });
         }
         req.session.user = userData;
+        if (userData.id === 12) {
+            console.log('Redirecting to admin page...');
+            return res.redirect('/admin');
+        }
+        console.log('Redirecting to lobby page...');
         res.redirect('/lobby');
     } catch (error) {
         console.error('Error during login:', error);
         res.status(500).send('Internal Server Error');
     }
 });
+
 
 app.get('/login', (req, res) => {
     res.render('pages/login', { error: null });
@@ -95,11 +127,17 @@ app.get('/check-voting-status', async (req, res) => {
 });
 
 app.get('/voting', async (req, res) => {
-    const user = req.session.user;
-    if (!user) {
-        return res.redirect('/');
-    }
     try {
+        const resultsData = await database.tulemusedModel.findOne({ order: [['h_alguse_aeg', 'DESC']] });
+    	const startTime = new Date(resultsData.h_alguse_aeg).getTime() + new Date().getTimezoneOffset() * 60000;
+        const votingStartTime = new Date() - startTime;
+        if (votingStartTime <= 0) {
+            return res.redirect('/lobby');
+        }
+        const user = req.session.user;
+        if (!user) {
+            return res.redirect('/');
+        }
         const votingEnded = await database.checkIfVoted(user);
         if (votingEnded) {
             return res.redirect('/lobby');

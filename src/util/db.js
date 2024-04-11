@@ -67,6 +67,20 @@ class DB {
 		const userData = await voted.findOne({ where: { id: user.id } });
 		return userData ? userData.voted : false;
 	}
+    async addNewVotingTime(newVotingTime) {
+        if (!this.started) {
+            throw new Error('Database not started');
+        }
+    
+        try {
+            await this.tulemusedModel.create({ h_alguse_aeg: newVotingTime });
+            const user = Kasutajad(this.sequelize, DataTypes);
+            await user.update({ voted: false }, { where: {} });
+        } catch (error) {
+            throw new Error('Error adding new voting time:', error);
+        }
+    }
+    
 	
 }
 
