@@ -3,6 +3,11 @@ const loader = document.getElementById('loader');
 const voted = countdown.getAttribute('voted');
 const endTime = new Date(countdown.getAttribute('data-time')).getTime() + new Date().getTimezoneOffset() * 60000;
 
+const logoutButton = document.getElementById('logout');
+logoutButton.addEventListener('click', () => {
+    window.location.href = '/logout';
+});
+
 const timer = setInterval(() => {
     const now = new Date().getTime();
     const distance = endTime - now;

@@ -107,6 +107,17 @@ app.post('/login', async (req, res) => {
 	}
 });
 
+app.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.redirect('/');
+        }
+
+        res.clearCookie('connect.sid', { path: '/' });
+        res.redirect('/login');
+    });
+});
+
 
 app.get('/login', (req, res) => {
 	res.render('pages/login', { error: null });
