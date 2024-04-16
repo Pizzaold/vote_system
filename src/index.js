@@ -38,7 +38,7 @@ app.get('/', async (req, res) => {
 app.get('/voting-start-time', async (req, res) => {
 	try {
 		const resultsData = await database.tulemusedModel.findOne({ order: [['h_alguse_aeg', 'DESC']] });
-    	const startTime = new Date(resultsData.h_alguse_aeg).getTime() + new Date().getTimezoneOffset() * 60000;
+		const startTime = new Date(resultsData.h_alguse_aeg).getTime() + new Date().getTimezoneOffset() * 60000;
 		res.json({ startTime });
 	} catch (error) {
 		console.error('Error retrieving voting start time:', error);
@@ -105,12 +105,12 @@ app.get('/lobby', async (req, res) => {
 	if (!req.session.user) {
 		return res.redirect('/');
 	}
-    const user = req.session.user;
+	const user = req.session.user;
 	const voted = await database.checkIfVoted(user);
 	const resultsData = await database.tulemusedModel.findOne({ order: [['h_alguse_aeg', 'DESC']] });
-    if (resultsData == null) {
-        return res.render('pages/lobby', { time: null, voted});
-    }
+	if (resultsData == null) {
+		return res.render('pages/lobby', { time: null, voted });
+	}
 	const time = new Date(resultsData.h_alguse_aeg);
 	res.render('pages/lobby', { time, voted });
 });
@@ -132,7 +132,7 @@ app.get('/check-voting-status', async (req, res) => {
 app.get('/voting', async (req, res) => {
 	try {
 		const resultsData = await database.tulemusedModel.findOne({ order: [['h_alguse_aeg', 'DESC']] });
-    	const startTime = new Date(resultsData.h_alguse_aeg).getTime() + new Date().getTimezoneOffset() * 60000;
+		const startTime = new Date(resultsData.h_alguse_aeg).getTime() + new Date().getTimezoneOffset() * 60000;
 		const votingStartTime = new Date() - startTime;
 		if (votingStartTime <= 0) {
 			return res.redirect('/lobby');

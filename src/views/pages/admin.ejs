@@ -1,18 +1,30 @@
-<head>
-    <title>Admin Panel</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-</head>
-<h1>Admin Panel</h1>
-<h2>Add New Voting Start Time</h2>
-<form action="/admin/add-voting-time" method="POST">
-    <label for="voting-start-date">Voting Start Date:</label>
-    <input type="date" id="voting-start-date" name="startDate" required>
+<%- include('header'); -%>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Add New Voting Start Time</h2>
+            <br>
+            <form action="/admin/add-voting-time" method="POST">
+                <label for="voting-start-date">Voting Start Date:</label>
+                <input type="date" id="voting-start-date" name="startDate" required>
+                <br>
+                <label for="voting-start-time">Voting Start Time:</label>
+                <input type="text" id="voting-start-time" name="startTime" required placeholder="Select time">
+                <br>
+                <button class="btn btn-primary" type="submit">Add Voting Time</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <!-- Second column content here -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Bottom row content here -->
+        </div>
+    </div>
+</div>
 
-    <label for="voting-start-time">Voting Start Time:</label>
-    <input type="text" id="voting-start-time" name="startTime" required placeholder="Select time">
-
-    <button type="submit">Add Voting Time</button>
-</form>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     flatpickr("#voting-start-time", {
