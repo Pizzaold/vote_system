@@ -162,6 +162,21 @@ app.post('/mark-all-users-as-voted', async (req, res) => {
 	}
 });
 
+app.post('/vote_submit', async (req, res) => {
+	const user = req.session.user;
+	if (!user) {
+		return res.status(401).json({ error: 'User not authenticated' });
+	}
+	const { otsus } = req.body;
+	try {
+		await database.logAction(user.id, otsus);
+		res.render('pages/voting');
+	} catch (error) {
+		console.error('Error logging action:', error);
+		res.status(500).send('Internal Server Error');
+	}
+});
+
 app.listen(port, () => {
 	console.log(`Server is running on port ${port}`);
 });
