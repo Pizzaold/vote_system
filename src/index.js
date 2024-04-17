@@ -108,14 +108,14 @@ app.post('/login', async (req, res) => {
 });
 
 app.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (err) {
-            return res.redirect('/');
-        }
+	req.session.destroy(err => {
+		if (err) {
+			return res.redirect('/');
+		}
 
-        res.clearCookie('connect.sid', { path: '/' });
-        res.redirect('/login');
-    });
+		res.clearCookie('connect.sid', { path: '/' });
+		res.redirect('/login');
+	});
 });
 
 
@@ -204,15 +204,15 @@ app.post('/vote_submit', async (req, res) => {
 });
 
 app.post('/count-votes', async (req, res) => {
-    try {
-        const votes = await database.countVotes();
-        await database.updateTulemused(votes);
+	try {
+		const votes = await database.countVotes();
+		await database.updateTulemused(votes);
 
-        res.sendStatus(200);
-    } catch (error) {
-        console.error('Error counting votes:', error);
-        res.status(500).send('Internal Server Error');
-    }
+		res.sendStatus(200);
+	} catch (error) {
+		console.error('Error counting votes:', error);
+		res.status(500).send('Internal Server Error');
+	}
 });
 
 app.listen(port, () => {
