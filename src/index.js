@@ -51,15 +51,16 @@ app.get('/admin', async (req, res) => {
 	if (!user || user.id !== 12) {
 		return res.redirect('/');
 	}
-
 	try {
 		const logiData = await database.LogiModel.findAll({
 			order: [['tegevus_aeg', 'DESC']],
 		});
-
-		res.render('pages/admin', { logiData });
+		const tulemusedData = await database.tulemusedModel.findAll({
+			order: [['h_alguse_aeg', 'DESC']],
+		});
+		res.render('pages/admin', { logiData, tulemusedData });
 	} catch (error) {
-		console.error('Error fetching LOGI table data:', error);
+		console.error('Error fetching data:', error);
 		res.status(500).send('Internal Server Error');
 	}
 });

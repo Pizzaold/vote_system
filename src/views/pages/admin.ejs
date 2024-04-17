@@ -28,7 +28,7 @@
                     <% logiData.forEach(entry => { %>
                         <tr>
                             <td><%= entry.kasutaja_id %></td>
-                            <td><%= entry.tegevus_aeg %></td>
+                            <td><%= new Date(entry.tegevus_aeg).toLocaleString('en-US', {dateStyle: 'short', timeStyle: 'short'}) %></td>
                             <td><%= entry.otsus %></td>
                         </tr>
                     <% }); %>
@@ -36,11 +36,48 @@
             </table>
         </div>
     </div>
-    <div class="row">
+    <div class="row mt-4">
         <div class="col-md-12 border">
-            <!-- Bottom row content here -->
+            <h2 class="text-center">Tulemused</h2>
+            <div class="row">
+                <div class="col-md-9 mx-auto">
+                    <div id="carouselExample" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <% var chunkedData = []; %>
+                            <% for (var i = 0; i < tulemusedData.length; i += 3) { %>
+                                <% chunkedData.push(tulemusedData.slice(i, i + 3)); %>
+                            <% } %>
+                            <% chunkedData.forEach((chunk, chunkIndex) => { %>
+                                <div class="carousel-item <%= chunkIndex === 0 ? 'active' : '' %>">
+                                    <div class="d-flex justify-content-center">
+                                        <% chunk.forEach((tulemus, index) => { %>
+                                            <div class="card mx-2" style="max-width: 300px;">
+                                                <div class="card-body">
+                                                    <h5 class="card-title text-center"><%= new Date(tulemus.h_alguse_aeg).toLocaleString('en-US', {dateStyle: 'short', timeStyle: 'short'}) %></h5>
+                                                    <p class="card-text">Poolt: <%= tulemus.poolt_hääled %></p>
+                                                    <p class="card-text">Vastu: <%= tulemus.poolt_hääled %></p>
+                                                </div>
+                                            </div>
+                                        <% }) %>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                            <span class="carousel-control-prev-text text-dark">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExample" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                            <span class="carousel-control-next-text text-dark">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </div>    
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
