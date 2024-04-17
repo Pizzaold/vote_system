@@ -6,10 +6,9 @@ async function fetchVotingStartTime() {
 		const votingStartTimeResponse = await fetch('/voting-start-time');
 		const votingStartTimeData = await votingStartTimeResponse.json();
 		const startTime = new Date(votingStartTimeData.startTime).getTime();
-		const endTime = startTime + (1000 * 60 * 1000);
+		const endTime = startTime + (0.5 * 60 * 1000);
 		const currentTime = Date.now();
 		timeLeft = Math.max(Math.floor((endTime - currentTime) / 1000), 0);
-
 		const votingStatusResponse = await fetch('/check-voting-status');
 		const votingStatusData = await votingStatusResponse.json();
 		if (votingStatusData.voted) {
@@ -28,9 +27,21 @@ async function markAllUsersAsVoted() {
 		if (!response.ok) {
 			throw new Error('Error marking all users as voted');
 		}
+		await countVotes();
 	} catch (error) {
 		console.error('Error:', error);
 	}
+}
+
+async function countVotes() {
+    try {
+        const response = await fetch('/count-votes', { method: 'POST' });
+        if (!response.ok) {
+            throw new Error('Error counting votes');
+        }
+    } catch (error) {
+        console.error('Error counting votes:', error);
+    }
 }
 
 function startCountdown() {

@@ -177,6 +177,18 @@ app.post('/vote_submit', async (req, res) => {
 	}
 });
 
+app.post('/count-votes', async (req, res) => {
+    try {
+        const votes = await database.countVotes();
+        await database.updateTulemused(votes);
+
+        res.sendStatus(200);
+    } catch (error) {
+        console.error('Error counting votes:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 app.listen(port, () => {
 	console.log(`Server is running on port ${port}`);
 });

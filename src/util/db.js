@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { Sequelize, DataTypes, Op } = require('sequelize');
 const Hääletus = require('../models/HÄÄLETUS');
 const Logi = require('../models/LOGI');
 const Kasutajad = require('../models/KASUTAJAD');
@@ -49,7 +49,6 @@ class DB {
 		const voted = Kasutajad(this.sequelize, DataTypes);
 		return await voted.findOne({ where: { kasutajanimi: username, parool: password } });
 	}
-
 	async markAllUsersAsVoted() {
 		if (!this.started) {
 			throw new Error('Database not started');
@@ -57,7 +56,6 @@ class DB {
 		const user = Kasutajad(this.sequelize, DataTypes);
 		await user.update({ voted: true }, { where: {} });
 	}
-
 	async checkIfVoted(user) {
 		if (!this.started) {
 			throw new Error('Database not started');
@@ -66,19 +64,70 @@ class DB {
 		const userData = await voted.findOne({ where: { id: user.id } });
 		return userData ? userData.voted : false;
 	}
+	async countVotes() {
+		try {
+			const votes = await this.HääletusModel.findAll({
+				attributes: [
+					'otsus',
+					[this.sequelize.fn('COUNT', this.sequelize.col('otsus')), 'count']
+				],
+				where: {
+					otsus: {
+						[Op.not]: null
+					}
+				},
+				group: ['otsus']
+			});
+			return votes;
+		} catch (error) {
+			console.error('Error counting votes:', error);
+			throw error;
+		}
+	}
+	
+	async updateTulemused(votes) {
+		try {
+			let totalCount = 0;
+			let pooltCount = 0;
+			let vastuCount = 0;
+
+			votes.forEach(vote => {
+				const count = vote.dataValues.count;
+				totalCount += count;
+				if (vote.dataValues.otsus === 'poolt') {
+					pooltCount += count;
+				} else if (vote.dataValues.otsus === 'vastu') {
+					vastuCount += count;
+				}
+			});
+			const latestEntry = await this.tulemusedModel.findOne({
+				order: [['h_alguse_aeg', 'DESC']]
+			});
+			await latestEntry.update({
+				hääletanute_arv: totalCount,
+				poolt_hääled: pooltCount,
+				vastu_hääled: vastuCount
+			});
+		} catch (error) {
+			console.error('Error updating TULEMUSED table:', error);
+			throw error;
+		}
+	}	
 	async addNewVotingTime(newVotingTime) {
 		if (!this.started) {
 			throw new Error('Database not started');
 		}
-
+	
 		try {
 			await this.tulemusedModel.create({ h_alguse_aeg: newVotingTime });
+			await this.HääletusModel.update({ otsus: null }, { where: {} });
 			const user = Kasutajad(this.sequelize, DataTypes);
 			await user.update({ voted: false }, { where: {} });
 		} catch (error) {
 			throw new Error('Error adding new voting time:', error);
 		}
 	}
+	
 	async logAction(kasutaja_id, otsus) {
 		if (!this.started) {
 			throw new Error('Database not started');
