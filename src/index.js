@@ -51,8 +51,19 @@ app.get('/admin', async (req, res) => {
 	if (!user || user.id !== 12) {
 		return res.redirect('/');
 	}
-	res.render('pages/admin');
+
+	try {
+		const logiData = await database.LogiModel.findAll({
+			order: [['tegevus_aeg', 'DESC']],
+		});
+
+		res.render('pages/admin', { logiData });
+	} catch (error) {
+		console.error('Error fetching LOGI table data:', error);
+		res.status(500).send('Internal Server Error');
+	}
 });
+
 
 app.post('/admin/add-voting-time', async (req, res) => {
 	const user = req.session.user;

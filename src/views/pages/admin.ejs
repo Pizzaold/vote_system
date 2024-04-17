@@ -1,7 +1,7 @@
 <%- include('header'); -%>
 <div class="container mt-4">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 border">
             <h2>Add New Voting Start Time</h2>
             <br>
             <form action="/admin/add-voting-time" method="POST">
@@ -14,12 +14,30 @@
                 <button class="btn btn-primary" type="submit">Add Voting Time</button>
             </form>
         </div>
-        <div class="col-md-6">
-            <!-- Second column content here -->
+        <div class="col-md-6 border" style="height: 400px; overflow-y: auto;">
+            <h2>LOGI Table</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Action Time</th>
+                        <th>Decision</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% logiData.forEach(entry => { %>
+                        <tr>
+                            <td><%= entry.kasutaja_id %></td>
+                            <td><%= entry.tegevus_aeg %></td>
+                            <td><%= entry.otsus %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 border">
             <!-- Bottom row content here -->
         </div>
     </div>
