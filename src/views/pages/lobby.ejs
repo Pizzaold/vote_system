@@ -1,8 +1,13 @@
-<%- include('header'); -%>
-<div class="d-flex justify-content-center align-items-center hugetext" style="height: 100vh;">
-    <h1 class="display-1" id="countdown" data-time="<%= time %>" voted="<%= voted %>"></h1>
-    <%- include('loader'); -%>
-</div>
-<div class="btn btn-primary d-flex justify-content-center" id="logout">Log out</div>
-<script src="../js/countdown.js"></script>
+<html>
+    <head>
+    <%- include('header'); -%>
+    </head>
+    <body>
+        <div class="d-flex justify-content-center align-items-center hugetext" style="height: 100vh;">
+            <h1 class="display-1" id="countdown" data-time="<%= time %>" voted="<%= voted %>"></h1>
+            <%- include('loader'); -%>
+        </div>
+        <div class="btn btn-primary d-flex justify-content-center" id="logout">Log out</div>
+        <script src="../js/countdown.js"></script>    
+    </body>
 </html>

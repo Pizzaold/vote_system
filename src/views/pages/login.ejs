@@ -1,41 +1,47 @@
 <!-- login.ejs -->
-<%- include('header'); -%>
-
-<main class="d-flex justify-content-center align-items-center" style="height: 100vh;">
-    <form name="form1" method="POST" action="/login">
-        <table>
-            <tr>
-                <td>
-                    <label for="kasutajanimi" class="text-dark">User:</label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input id="kasutajanimi" class="form-control" type="text" name="kasutajanimi">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="parool" class="text-dark">Password:</label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input id="parool" class="form-control" type="password" name="parool">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="form-group">
-                        <input class="btn btn-primary btn-block" type="submit" value="Save">
+<html>
+    <head>
+        <%- include('header'); -%>
+    </head>
+    <body>
+        <main class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+            <form name="form1" method="POST" action="/login">
+                <table>
+                    <tr>
+                        <td>
+                            <label for="kasutajanimi" class="text-dark">User:</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="kasutajanimi" class="form-control" type="text" name="kasutajanimi">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="parool" class="text-dark">Password:</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="parool" class="form-control" type="password" name="parool">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <input class="btn btn-primary btn-block" type="submit" value="Save">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <% if (error) { %>
+                    <div class="alert alert-danger" role="alert">
+                        <%= error %>
                     </div>
-                </td>
-            </tr>
-        </table>
-        <% if (error) { %>
-            <div class="alert alert-danger" role="alert">
-                <%= error %>
-            </div>
-        <% } %>
-    </form>
-</main>
+                <% } %>
+            </form>
+        </main>
+         
+    </body>
+</html>
