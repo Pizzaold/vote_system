@@ -45,7 +45,7 @@ async function countVotes() {
 }
 
 function startCountdown() {
-	const timerInterval = setInterval(async () => {
+	const intervalFunc = async () => {
 		const minutes = Math.floor(timeLeft / 60);
 		const seconds = timeLeft % 60;
 		const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
@@ -58,7 +58,9 @@ function startCountdown() {
 			await markAllUsersAsVoted();
 			window.location.href = '/lobby';
 		}
-	}, 1000);
+	}
+	intervalFunc();
+	const timerInterval = setInterval(intervalFunc, 1000);
 }
 
 fetchVotingStartTime();

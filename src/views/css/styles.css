@@ -14,3 +14,9 @@
     transform: translateX(-50%);
     width: 100%;
 }
+
+.notification {
+    position: absolute;
+    right: 10px;
+    top: 15px;
+}

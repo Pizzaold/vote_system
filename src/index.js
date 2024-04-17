@@ -155,9 +155,9 @@ app.get('/check-voting-status', async (req, res) => {
 app.get('/voting', async (req, res) => {
 	try {
 		const user = req.session.user;
-        if (user.id === 12) {
-            return res.redirect('/admin');
-        }
+		if (user.id === 12) {
+			return res.redirect('/admin');
+		}
 		const resultsData = await database.tulemusedModel.findOne({ order: [['h_alguse_aeg', 'DESC']] });
 		const startTime = new Date(resultsData.h_alguse_aeg).getTime() + new Date().getTimezoneOffset() * 60000;
 		const votingStartTime = new Date() - startTime;
@@ -176,6 +176,19 @@ app.get('/voting', async (req, res) => {
 		console.error('Error during voting:', error);
 		res.status(500).send('Internal Server Error');
 	}
+}).post('/voting', async (req, res) => {
+	const user = req.session.user;
+	if (!user) {
+		return res.status(401).json({ error: 'User not authenticated' });
+	}
+	const { otsus } = req.body;
+	try {
+		await database.logAction(user.id, otsus);
+		res.render('pages/voting', { user_voted: true, user_choice: otsus });
+	} catch (error) {
+		console.error('Error logging action:', error);
+		res.status(500).send('Internal Server Error');
+	}
 });
 
 app.post('/mark-all-users-as-voted', async (req, res) => {
@@ -185,21 +198,6 @@ app.post('/mark-all-users-as-voted', async (req, res) => {
 	} catch (error) {
 		console.error('Error marking all users as voted:', error);
 		res.sendStatus(500);
-	}
-});
-
-app.post('/vote_submit', async (req, res) => {
-	const user = req.session.user;
-	if (!user) {
-		return res.status(401).json({ error: 'User not authenticated' });
-	}
-	const { otsus } = req.body;
-	try {
-		await database.logAction(user.id, otsus);
-		res.render('pages/voting');
-	} catch (error) {
-		console.error('Error logging action:', error);
-		res.status(500).send('Internal Server Error');
 	}
 });
 
