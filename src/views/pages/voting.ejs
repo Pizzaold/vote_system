@@ -4,18 +4,18 @@
         <div class="h1" id="time-counter"></div>
 
         <main class="d-flex justify-content-center align-items-center h1" style="height: 100vh">
-            <form name="form1" method="POST" action="">
+            <form name="form1" method="POST" action="/vote_submit">
                 <table>
                     <tr>
                         <td>
-                            <label for="option" class="text-dark h1">Option:</label>
+                            <label for="otsus" class="text-dark h1">Option:</label>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <select id="option" class="form-control h1" name="option">
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
+                            <select id="otsus" class="form-control h1" name="otsus">
+                                <option value="poolt">Yes</option>
+                                <option value="vastu">No</option>
                             </select>
                         </td>
                     </tr>
@@ -27,7 +27,7 @@
                         </td>
                     </tr>
                 </table>
-            </form>
+            </form>            
         </main>
     </body>
     <script src="../js/countdown_voting.js"></script>

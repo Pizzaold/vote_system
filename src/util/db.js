@@ -16,6 +16,14 @@ class DB {
 			password: process.env.DB_PASS,
 			timezone: 'Talline/Europe',
 		});
+		this.logActionHook = async (kasutaja_id, otsus) => {
+			if (!this.started) {
+				throw new Error('Database not started');
+			}
+			const hääletuse_aeg = new Date();
+			console.log('Logging action:', kasutaja_id, hääletuse_aeg, otsus);
+			await this.LogiModel.create({ kasutaja_id, tegevus_aeg: hääletuse_aeg, otsus });
+		};
 	}
 	async start() {
 		try {
@@ -40,15 +48,6 @@ class DB {
 		}
 		const voted = Kasutajad(this.sequelize, DataTypes);
 		return await voted.findOne({ where: { kasutajanimi: username, parool: password } });
-	}
-	async logAction(kasutaja_id, otsus) {
-		if (!this.started) {
-			throw new Error('Database not started');
-		}
-		const tegevus_aeg = new Date();
-		await this.LogiModel.create({ kasutaja_id, otsus, tegevus_aeg });
-		await this.HääletusModel.update({ otsus }, { where: { kasutaja_id } });
-		return await this.LogiModel.findAll();
 	}
 
 	async markAllUsersAsVoted() {
@@ -80,8 +79,15 @@ class DB {
 			throw new Error('Error adding new voting time:', error);
 		}
 	}
-
-
+	async logAction(kasutaja_id, otsus) {
+		if (!this.started) {
+			throw new Error('Database not started');
+		}
+		const hääletuse_aeg = new Date();
+		await this.logActionHook(kasutaja_id, otsus);
+		await this.HääletusModel.update({ hääletuse_aeg, otsus }, { where: { kasutaja_id } });
+		return await this.LogiModel.findAll();
+	}
 }
 
 module.exports = DB;
