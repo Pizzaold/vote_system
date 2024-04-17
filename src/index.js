@@ -154,13 +154,16 @@ app.get('/check-voting-status', async (req, res) => {
 
 app.get('/voting', async (req, res) => {
 	try {
+		const user = req.session.user;
+        if (user.id === 12) {
+            return res.redirect('/admin');
+        }
 		const resultsData = await database.tulemusedModel.findOne({ order: [['h_alguse_aeg', 'DESC']] });
 		const startTime = new Date(resultsData.h_alguse_aeg).getTime() + new Date().getTimezoneOffset() * 60000;
 		const votingStartTime = new Date() - startTime;
 		if (votingStartTime <= 0) {
 			return res.redirect('/lobby');
 		}
-		const user = req.session.user;
 		if (!user) {
 			return res.redirect('/');
 		}
