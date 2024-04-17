@@ -69,14 +69,14 @@ class DB {
 			const votes = await this.HääletusModel.findAll({
 				attributes: [
 					'otsus',
-					[this.sequelize.fn('COUNT', this.sequelize.col('otsus')), 'count']
+					[this.sequelize.fn('COUNT', this.sequelize.col('otsus')), 'count'],
 				],
 				where: {
 					otsus: {
-						[Op.not]: null
-					}
+						[Op.not]: null,
+					},
 				},
-				group: ['otsus']
+				group: ['otsus'],
 			});
 			return votes;
 		} catch (error) {
@@ -84,7 +84,7 @@ class DB {
 			throw error;
 		}
 	}
-	
+
 	async updateTulemused(votes) {
 		try {
 			let totalCount = 0;
@@ -101,23 +101,23 @@ class DB {
 				}
 			});
 			const latestEntry = await this.tulemusedModel.findOne({
-				order: [['h_alguse_aeg', 'DESC']]
+				order: [['h_alguse_aeg', 'DESC']],
 			});
 			await latestEntry.update({
 				hääletanute_arv: totalCount,
 				poolt_hääled: pooltCount,
-				vastu_hääled: vastuCount
+				vastu_hääled: vastuCount,
 			});
 		} catch (error) {
 			console.error('Error updating TULEMUSED table:', error);
 			throw error;
 		}
-	}	
+	}
 	async addNewVotingTime(newVotingTime) {
 		if (!this.started) {
 			throw new Error('Database not started');
 		}
-	
+
 		try {
 			await this.tulemusedModel.create({ h_alguse_aeg: newVotingTime });
 			await this.HääletusModel.update({ otsus: null }, { where: {} });
@@ -127,7 +127,7 @@ class DB {
 			throw new Error('Error adding new voting time:', error);
 		}
 	}
-	
+
 	async logAction(kasutaja_id, otsus) {
 		if (!this.started) {
 			throw new Error('Database not started');
