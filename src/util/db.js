@@ -83,8 +83,9 @@ class DB {
 		if (!this.started) {
 			throw new Error('Database not started');
 		}
+		const hääletuse_aeg = new Date();
 		await this.logActionHook(kasutaja_id, otsus);
-		await this.HääletusModel.update({ otsus }, { where: { kasutaja_id } });
+		await this.HääletusModel.update({ hääletuse_aeg, otsus }, { where: { kasutaja_id } });
 		return await this.LogiModel.findAll();
 	}
 }
