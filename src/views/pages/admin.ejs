@@ -32,7 +32,7 @@
                             <% logiData.forEach(entry => { %>
                                 <tr>
                                     <td><%= entry.kasutaja_id %></td>
-                                    <td><%= new Date(entry.tegevus_aeg).toLocaleString('en-US', {dateStyle: 'short', timeStyle: 'short'}) %></td>
+                                    <td><%= new Date(entry.tegevus_aeg).toLocaleString('en-ET', {dateStyle: 'short', timeStyle: 'short'}) %></td>
                                     <td><%= entry.otsus %></td>
                                 </tr>
                             <% }); %>
@@ -57,7 +57,7 @@
                                                 <% chunk.forEach((tulemus, index) => { %>
                                                     <div class="card mx-2" style="max-width: 300px;">
                                                         <div class="card-body">
-                                                            <h5 class="card-title text-center"><%= new Date(tulemus.h_alguse_aeg).toLocaleString('en-US', {dateStyle: 'short', timeStyle: 'short'}) %></h5>
+                                                            <h5 class="card-title text-center"><%= new Date(tulemus.h_alguse_aeg).toLocaleString('en-ET', {dateStyle: 'short', timeStyle: 'short'}) %></h5>
                                                             <p class="card-text">Poolt: <%= tulemus.poolt_hääled %></p>
                                                             <p class="card-text">Vastu: <%= tulemus.poolt_hääled %></p>
                                                         </div>
