@@ -6,7 +6,7 @@ async function fetchVotingStartTime() {
 		const votingStartTimeResponse = await fetch('/voting-start-time');
 		const votingStartTimeData = await votingStartTimeResponse.json();
 		const startTime = new Date(votingStartTimeData.startTime).getTime();
-		const endTime = startTime + (0.5 * 60 * 1000);
+		const endTime = startTime + (5 * 60 * 1000);
 		const currentTime = Date.now();
 		timeLeft = Math.max(Math.floor((endTime - currentTime) / 1000), 0);
 		const votingStatusResponse = await fetch('/check-voting-status');
