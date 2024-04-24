@@ -14,7 +14,10 @@ class DB {
 			host: process.env.DB_HOST,
 			username: process.env.DB_USER,
 			password: process.env.DB_PASS,
-			timezone: 'Talline/Europe',
+			dialectOptions: {
+				timezone: 'local',
+			},
+			timezone: '+03:00',
 		});
 	}
 	async start() {

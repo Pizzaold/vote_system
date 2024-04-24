@@ -1,9 +1,7 @@
 const express = require('express');
-const ejs = require('ejs');
 const path = require('path');
 const db = require('./util/db');
 const session = require('express-session');
-const { error } = require('console');
 const database = new db();
 
 const app = express();
@@ -38,7 +36,7 @@ app.get('/', async (req, res) => {
 app.get('/voting-start-time', async (req, res) => {
 	try {
 		const resultsData = await database.tulemusedModel.findOne({ order: [['h_alguse_aeg', 'DESC']] });
-		const startTime = new Date(resultsData.h_alguse_aeg).getTime() + new Date().getTimezoneOffset() * 60000;
+		const startTime = new Date(resultsData.h_alguse_aeg).getTime() + new Date().getTimezoneOffset();
 		res.json({ startTime });
 	} catch (error) {
 		console.error('Error retrieving voting start time:', error);
@@ -134,7 +132,8 @@ app.get('/lobby', async (req, res) => {
 	if (resultsData == null) {
 		return res.render('pages/lobby', { time: null, voted });
 	}
-	const time = new Date(resultsData.h_alguse_aeg);
+	const time = new Date(resultsData.h_alguse_aeg).getTime() + new Date().getTimezoneOffset();
+	console.log('Time:', time);
 	res.render('pages/lobby', { time, voted });
 });
 

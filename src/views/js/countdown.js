@@ -1,7 +1,7 @@
 const countdown = document.getElementById('countdown');
 const loader = document.getElementById('loader');
 const voted = countdown.getAttribute('voted');
-const endTime = new Date(countdown.getAttribute('data-time')).getTime() + new Date().getTimezoneOffset() * 60000;
+const endTime = countdown.getAttribute('data-time');
 
 const logoutButton = document.getElementById('logout');
 logoutButton.addEventListener('click', () => {
