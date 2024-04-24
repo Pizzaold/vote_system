@@ -16,14 +16,6 @@ class DB {
 			password: process.env.DB_PASS,
 			timezone: 'Talline/Europe',
 		});
-		this.logActionHook = async (kasutaja_id, otsus) => {
-			if (!this.started) {
-				throw new Error('Database not started');
-			}
-			const hääletuse_aeg = new Date();
-			console.log('Logging action:', kasutaja_id, hääletuse_aeg, otsus);
-			await this.LogiModel.create({ kasutaja_id, tegevus_aeg: hääletuse_aeg, otsus });
-		};
 	}
 	async start() {
 		try {
@@ -128,12 +120,11 @@ class DB {
 		}
 	}
 
-	async logAction(kasutaja_id, otsus) {
+	async voteAction(kasutaja_id, otsus) {
 		if (!this.started) {
 			throw new Error('Database not started');
 		}
 		const hääletuse_aeg = new Date();
-		await this.logActionHook(kasutaja_id, otsus);
 		await this.HääletusModel.update({ hääletuse_aeg, otsus }, { where: { kasutaja_id } });
 		return await this.LogiModel.findAll();
 	}

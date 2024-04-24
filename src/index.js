@@ -183,7 +183,7 @@ app.get('/voting', async (req, res) => {
 	}
 	const { otsus } = req.body;
 	try {
-		await database.logAction(user.id, otsus);
+		await database.voteAction(user.id, otsus);
 		res.render('pages/voting', { user_voted: true, user_choice: otsus });
 	} catch (error) {
 		console.error('Error logging action:', error);
